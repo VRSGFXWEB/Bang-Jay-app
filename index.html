@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🛒 Toko Online 🛒</title>
+    <style>
+        :root {
+            --primary: #ff6b00;
+            --secondary: #ff9500;
+            --dark: #121212;
+            --light: #f5f5f5;
+            --gray: #333333;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: all 0.3s ease;
+        }
+        
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            background: linear-gradient(135deg, var(--gray), var(--dark));
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .login-form input {
+            padding: 12px 20px;
+            width: 300px;
+            border-radius: 50px;
+            border: none;
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+        }
+        
+        .login-form input:focus {
+            background-color: rgba(255,255,255,0.2);
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border-radius: 50px;
+            border: none;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--secondary), var(--primary));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .btn:hover::after {
+            opacity: 1;
+        }
+        
+        .btn span {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .toko-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .toko-card {
+            background: linear-gradient(135deg, var(--gray), var(--dark));
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            border-left: 5px solid var(--primary);
+        }
+        
+        .toko-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        
+        .toko-card h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+        
+        .toko-card p {
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        
+        .back-btn {
+            margin-bottom: 20px;
+            background: var(--gray);
+        }
+        
+        .barang-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .barang-card {
+            background: linear-gradient(135deg, var(--gray), var(--dark));
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .barang-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        
+        .barang-img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            background-color: #444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #666;
+        }
+        
+        .barang-card h3 {
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .barang-card p {
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        
+        .detail-barang {
+            background: linear-gradient(135deg, var(--gray), var(--dark));
+            border-radius: 10px;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        
+        .detail-barang h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .detail-info {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .detail-img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            background-color: #444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #666;
+        }
+        
+        .detail-text {
+            flex: 1;
+        }
+        
+        .detail-text h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: white;
+        }
+        
+        .harga {
+            font-size: 1.8rem;
+            color: var(--secondary);
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ccc;
+        }
+        
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: none;
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+        }
+        
+        .form-group input:focus, .form-group textarea:focus {
+            background-color: rgba(255,255,255,0.2);
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+        
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .quantity-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .quantity-btn:hover {
+            background: var(--secondary);
+        }
+        
+        .quantity-value {
+            font-size: 1.2rem;
+            min-width: 30px;
+            text-align: center;
+        }
+        
+        .ojek-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .ojek-card {
+            background: linear-gradient(135deg, var(--gray), var(--dark));
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            border-left: 5px solid var(--secondary);
+            text-align: center;
+        }
+        
+        .ojek-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        
+        .ojek-card h3 {
+            color: var(--secondary);
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+        
+        .ojek-card p {
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 107, 0, 0.7);
+            }
+            70% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 10px rgba(255, 107, 0, 0);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 107, 0, 0);
+            }
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Menu Login -->
+        <div id="login-section">
+            <header>
+                <h1>🛍️ MENU UTAMA 🛍️</h1>
+                <p>👋 Selamat datang di Toko Online kami! 👋</p>
+                
+                <div class="login-form">
+                    <input type="text" id="nama-user" placeholder="Masukkan nama Anda" required>
+                    <button class="btn pulse" id="login-btn"><span>🚀 MASUK 🚀</span></button>
+                </div>
+            </header>
+        </div>
+        
+        <!-- Daftar Toko -->
+        <div id="toko-section" class="hidden">
+            <button class="btn back-btn" id="back-to-login">⬅ Kembali</button>
+            <h2 id="welcome-message">👋 Selamat datang, <span id="nama-pengguna"></span>!</h2>
+            <p>🏪 Silakan pilih toko yang ingin Anda kunjungi:</p>
+            
+            <div class="toko-list">
+                <div class="toko-card floating" data-toko="mas-yanto">
+                    <h3>🍜 MAS YANTO BAKSO 🍜</h3>
+                    <p>📍 Jalan lintas Sumbawa - Tano no.18 Alas Barat</p>
+                </div>
+                
+                <div class="toko-card floating" data-toko="mas-win">
+                    <h3>🍢 MAS WIN BAKSO 🍢</h3>
+                    <p>📍 Jalan lintas Sumbawa - Tano no.18 Alas Barat</p>
+                </div>
+                
+                <div class="toko-card floating" data-toko="riken">
+                    <h3>🍎 RIKEN BUAH 🍎</h3>
+                    <p>📍 Jalan lintas Sumbawa - Tano no.18 Alas Barat</p>
+                </div>
+                
+                <div class="toko-card floating" data-toko="mas-jo">
+                    <h3>🍚 WARUNG NASI MAS JO 🍚</h3>
+                    <p>📍 Jalan lintas Sumbawa - Tano no.18 Alas Barat</p>
+                </div>
+                
+                <div class="toko-card floating" data-toko="tamsi">
+                    <h3>🥗 LALAPAN TAMSI 🥗</h3>
+                    <p>📍 Jalan lintas Sumbawa - Tano no.18 Alas Barat</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Daftar Barang -->
+        <div id="barang-section" class="hidden">
+            <button class="btn back-btn" id="back-to-toko">⬅ Kembali ke Toko</button>
+            <h2 id="nama-toko">🍜 MAS YANTO BAKSO 🍜</h2>
+            <p>🛒 Pilih barang yang ingin Anda beli:</p>
+            
+            <div class="barang-list">
+                <!-- Barang akan dimuat secara dinamis -->
+            </div>
+        </div>
+        
+        <!-- Detail Barang -->
+        <div id="detail-section" class="hidden">
+            <button class="btn back-btn" id="back-to-barang">⬅ Kembali ke Barang</button>
+            <div class="detail-barang">
+                <h2 id="nama-barang">🍜 Bakso Special 🍜</h2>
+                
+                <div class="detail-info">
+                    <div class="detail-img">📷</div>
+                    <div class="detail-text">
+                        <h3 id="detail-nama-barang">Bakso Special</h3>
+                        <p id="detail-deskripsi">Bakso daging sapi pilihan dengan kuah kaldu yang gurih dan nikmat.</p>
+                        <div class="harga" id="detail-harga">Rp 25.000</div>
+                    </div>
+                </div>
+                
+                <form id="pemesanan-form">
+                    <div class="form-group">
+                        <label for="nama-pembeli">👤 Nama Pembeli:</label>
+                        <input type="text" id="nama-pembeli" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="alamat-pembeli">🏠 Alamat Pembeli:</label>
+                        <textarea id="alamat-pembeli" rows="3" required></textarea>
+                    </div>
+                    
+                    <div class="quantity-control">
+                        <button type="button" class="quantity-btn" id="kurang">-</button>
+                        <span class="quantity-value" id="quantity">1</span>
+                        <button type="button" class="quantity-btn" id="tambah">+</button>
+                        <span style="margin-left: auto;">Jumlah</span>
+                    </div>
+                    
+                    <div class="harga" id="total-harga">Total: Rp 25.000</div>
+                    
+                    <button type="button" class="btn pulse" id="pesan-btn">🛒 PESAN SEKARANG 🛒</button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Pilih Ojek -->
+        <div id="ojek-section" class="hidden">
+            <button class="btn back-btn" id="back-to-detail">⬅ Kembali ke Detail</button>
+            <h2>🛵 Pilih Ojek Pengantar Barang Anda</h2>
+            <p>🚀 Silakan pilih ojek yang akan mengantar pesanan Anda:</p>
+            
+            <div class="ojek-list">
+                <div class="ojek-card" data-ojek="ojek1">
+                    <h3>🛵 OJEK 1 🛵</h3>
+                    <p>📞 +62 813-3326-7405</p>
+                    <p>⭐ Mas Jaya - Pengantar berpengalaman</p>
+                </div>
+                
+                <div class="ojek-card" data-ojek="ojek2">
+                    <h3>🏍️ OJEK 2 🏍️</h3>
+                    <p>📞 +62 812-3456-7890</p>
+                    <p>⭐ Mas Andi - Cepat dan ramah</p>
+                </div>
+                
+                <div class="ojek-card" data-ojek="ojek3">
+                    <h3>🚗 OJEK 3 🚗</h3>
+                    <p>📞 +62 811-2233-4455</p>
+                    <p>⭐ Mas Budi - Pengantar barang besar</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data toko dan barang
+        const dataToko = {
+            'mas-yanto': {
+                nama: '🍜 MAS YANTO BAKSO 🍜',
+                barang: [
+                    { id: 1, nama: '🍜 Bakso Special 🍜', harga: 25000, deskripsi: 'Bakso daging sapi pilihan dengan kuah kaldu yang gurih dan nikmat.' },
+                    { id: 2, nama: '🍢 Bakso Urat 🍢', harga: 20000, deskripsi: 'Bakso dengan campuran urat sapi yang kenyal dan lezat.' },
+                    { id: 3, nama: '🥟 Pangsit Goreng 🥟', harga: 15000, deskripsi: 'Pangsit goreng renyah dengan isian daging yang gurih.' },
+                    { id: 4, nama: '🍜 Mie Ayam 🍜', harga: 18000, deskripsi: 'Mie ayam dengan potongan daging ayam yang melimpah.' }
+                ]
+            },
+            'mas-win': {
+                nama: '🍢 MAS WIN BAKSO 🍢',
+                barang: [
+                    { id: 1, nama: '🍢 Bakso Jumbo 🍢', harga: 30000, deskripsi: 'Bakso ukuran jumbo dengan tekstur yang kenyal.' },
+                    { id: 2, nama: '🍜 Bakso Mercon 🍜', harga: 25000, deskripsi: 'Bakso dengan level pedas yang menggugah selera.' },
+                    { id: 3, nama: '🥗 Soto Ayam 🥗', harga: 20000, deskripsi: 'Soto ayam dengan kuah kuning yang sedap.' }
+                ]
+            },
+            'riken': {
+                nama: '🍎 RIKEN BUAH 🍎',
+                barang: [
+                    { id: 1, nama: '🍎 Buah Segar 🍎', harga: 15000, deskripsi: 'Campuran buah-buahan segar setiap hari.' },
+                    { id: 2, nama: '🍉 Semangka Potong 🍉', harga: 10000, deskripsi: 'Semangka merah manis dipotong siap saji.' },
+                    { id: 3, nama: '🍍 Nanas Madu 🍍', harga: 20000, deskripsi: 'Nanas madu asli dengan rasa manis alami.' }
+                ]
+            },
+            'mas-jo': {
+                nama: '🍚 WARUNG NASI MAS JO 🍚',
+                barang: [
+                    { id: 1, nama: '🍚 Nasi Campur 🍚', harga: 20000, deskripsi: 'Nasi dengan lauk pauk lengkap.' },
+                    { id: 2, nama: '🍗 Ayam Goreng 🍗', harga: 18000, deskripsi: 'Ayam goreng krispi dengan bumbu spesial.' },
+                    { id: 3, nama: '🍛 Nasi Goreng 🍛', harga: 15000, deskripsi: 'Nasi goreng dengan bumbu rempah pilihan.' }
+                ]
+            },
+            'tamsi': {
+                nama: '🥗 LALAPAN TAMSI 🥗',
+                barang: [
+                    { id: 1, nama: '🥗 Lalapan Ayam 🥗', harga: 22000, deskripsi: 'Ayam goreng dengan lalapan segar.' },
+                    { id: 2, nama: '🍗 Ayam Bakar 🍗', harga: 25000, deskripsi: 'Ayam bakar dengan bumbu khas.' },
+                    { id: 3, nama: '🥬 Pecel Lele 🥬', harga: 18000, deskripsi: 'Lele goreng dengan sambal dan lalapan.' }
+                ]
+            }
+        };
+
+        // Data ojek
+        const dataOjek = {
+            'ojek1': { nama: 'Mas Jaya', nomor: '+6281333267405' },
+            'ojek2': { nama: 'Mas Andi', nomor: '+6281234567890' },
+            'ojek3': { nama: 'Mas Budi', nomor: '+6281122334455' }
+        };
+
+        // Variabel state
+        let currentUser = '';
+        let currentToko = '';
+        let currentBarang = null;
+        let quantity = 1;
+        let orderDetails = {};
+
+        // DOM Elements
+        const loginSection = document.getElementById('login-section');
+        const tokoSection = document.getElementById('toko-section');
+        const barangSection = document.getElementById('barang-section');
+        const detailSection = document.getElementById('detail-section');
+        const ojekSection = document.getElementById('ojek-section');
+        
+        const namaPengguna = document.getElementById('nama-pengguna');
+        const namaToko = document.getElementById('nama-toko');
+        const barangList = document.querySelector('.barang-list');
+        
+        const namaBarang = document.getElementById('nama-barang');
+        const detailNamaBarang = document.getElementById('detail-nama-barang');
+        const detailDeskripsi = document.getElementById('detail-deskripsi');
+        const detailHarga = document.getElementById('detail-harga');
+        const totalHarga = document.getElementById('total-harga');
+        const quantityValue = document.getElementById('quantity');
+        
+        // Event Listeners
+        document.getElementById('login-btn').addEventListener('click', handleLogin);
+        document.getElementById('back-to-login').addEventListener('click', () => toggleSection('login'));
+        document.getElementById('back-to-toko').addEventListener('click', () => toggleSection('toko'));
+        document.getElementById('back-to-barang').addEventListener('click', () => toggleSection('barang'));
+        document.getElementById('back-to-detail').addEventListener('click', () => toggleSection('detail'));
+        
+        document.getElementById('tambah').addEventListener('click', () => updateQuantity(1));
+        document.getElementById('kurang').addEventListener('click', () => updateQuantity(-1));
+        document.getElementById('pesan-btn').addEventListener('click', handlePesan);
+        
+        // Fungsi untuk menangani login
+        function handleLogin() {
+            const namaInput = document.getElementById('nama-user');
+            if (namaInput.value.trim() === '') {
+                alert('Silakan masukkan nama Anda terlebih dahulu!');
+                return;
+            }
+            
+            currentUser = namaInput.value.trim();
+            namaPengguna.textContent = currentUser;
+            toggleSection('toko');
+        }
+        
+        // Fungsi untuk toggle section
+        function toggleSection(section) {
+            loginSection.classList.add('hidden');
+            tokoSection.classList.add('hidden');
+            barangSection.classList.add('hidden');
+            detailSection.classList.add('hidden');
+            ojekSection.classList.add('hidden');
+            
+            switch(section) {
+                case 'login':
+                    loginSection.classList.remove('hidden');
+                    break;
+                case 'toko':
+                    tokoSection.classList.remove('hidden');
+                    break;
+                case 'barang':
+                    loadBarang();
+                    barangSection.classList.remove('hidden');
+                    break;
+                case 'detail':
+                    detailSection.classList.remove('hidden');
+                    break;
+                case 'ojek':
+                    ojekSection.classList.remove('hidden');
+                    break;
+            }
+        }
+        
+        // Fungsi untuk memuat daftar barang
+        function loadBarang() {
+            barangList.innerHTML = '';
+            const toko = dataToko[currentToko];
+            
+            toko.barang.forEach(barang => {
+                const barangCard = document.createElement('div');
+                barangCard.className = 'barang-card';
+                barangCard.innerHTML = `
+                    <div class="barang-img">${barang.nama.split(' ')[0]}</div>
+                    <h3>${barang.nama}</h3>
+                    <p>Rp ${barang.harga.toLocaleString('id-ID')}</p>
+                `;
+                barangCard.addEventListener('click', () => showDetailBarang(barang));
+                barangList.appendChild(barangCard);
+            });
+        }
+        
+        // Fungsi untuk menampilkan detail barang
+        function showDetailBarang(barang) {
+            currentBarang = barang;
+            quantity = 1;
+            
+            namaBarang.textContent = barang.nama;
+            detailNamaBarang.textContent = barang.nama.replace(/[^\w\s]/gi, '');
+            detailDeskripsi.textContent = barang.deskripsi;
+            detailHarga.textContent = `Rp ${barang.harga.toLocaleString('id-ID')}`;
+            quantityValue.textContent = quantity;
+            totalHarga.textContent = `Total: Rp ${(barang.harga * quantity).toLocaleString('id-ID')}`;
+            
+            toggleSection('detail');
+        }
+        
+        // Fungsi untuk update quantity
+        function updateQuantity(change) {
+            quantity += change;
+            if (quantity < 1) quantity = 1;
+            
+            quantityValue.textContent = quantity;
+            totalHarga.textContent = `Total: Rp ${(currentBarang.harga * quantity).toLocaleString('id-ID')}`;
+        }
+        
+        // Fungsi untuk menangani pemesanan
+        function handlePesan() {
+            const namaPembeli = document.getElementById('nama-pembeli').value.trim();
+            const alamatPembeli = document.getElementById('alamat-pembeli').value.trim();
+            
+            if (!namaPembeli || !alamatPembeli) {
+                alert('Silakan lengkapi nama dan alamat pembeli terlebih dahulu!');
+                return;
+            }
+            
+            orderDetails = {
+                namaBarang: currentBarang.nama.replace(/[^\w\s]/gi, ''),
+                namaPembeli: namaPembeli,
+                hargaBarang: currentBarang.harga,
+                lokasiPembeli: alamatPembeli,
+                quantity: quantity,
+                totalHarga: currentBarang.harga * quantity
+            };
+            
+            toggleSection('ojek');
+        }
+        
+        // Event delegation untuk toko card
+        document.querySelector('.toko-list').addEventListener('click', (e) => {
+            const tokoCard = e.target.closest('.toko-card');
+            if (tokoCard) {
+                currentToko = tokoCard.dataset.toko;
+                namaToko.textContent = dataToko[currentToko].nama;
+                toggleSection('barang');
+            }
+        });
+        
+        // Event delegation untuk ojek card
+        document.querySelector('.ojek-list').addEventListener('click', (e) => {
+            const ojekCard = e.target.closest('.ojek-card');
+            if (ojekCard) {
+                const ojekId = ojekCard.dataset.ojek;
+                const ojek = dataOjek[ojekId];
+                
+                // Format pesan WhatsApp
+                const message = `Halo ${ojek.nama}, saya ingin memesan:\n\n` +
+                                `1. Nama Barang: ${orderDetails.namaBarang}\n` +
+                                `2. Nama Pembeli: ${orderDetails.namaPembeli}\n` +
+                                `3. Harga Satuan: Rp ${orderDetails.hargaBarang.toLocaleString('id-ID')}\n` +
+                                `4. Jumlah: ${orderDetails.quantity}\n` +
+                                `5. Total Harga: Rp ${orderDetails.totalHarga.toLocaleString('id-ID')}\n` +
+                                `6. Lokasi Pembeli: ${orderDetails.lokasiPembeli}\n\n` +
+                                `Terima kasih.`;
+                
+                // Encode message untuk URL
+                const encodedMessage = encodeURIComponent(message);
+                
+                // Buka WhatsApp
+                window.open(`https://wa.me/${ojek.nomor.replace(/\D/g, '')}?text=${encodedMessage}`, '_blank');
+            }
+        });
+        
+        // Animasi hover untuk semua card
+        document.querySelectorAll('.toko-card, .barang-card, .ojek-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-5px)';
+                card.style.boxShadow = '0 10px 20px rgba(0,0,0,0.3)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = '';
+                card.style.boxShadow = '';
+            });
+        });
+    </script>
+</body>
+</html>
